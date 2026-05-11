@@ -1,0 +1,28 @@
+﻿@model CoffeShop.Models.Product
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+}
+
+<div class="container">
+    <h1>@Model.Name</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <img src="@Model.ImageUrl" alt="@Model.Name" style="width:100%; max-width:400px; border-radius: 8px;" />
+        </div>
+        <div class="col-md-6">
+            <h3>Thông tin chi tiết</h3>
+            <p><strong>Giá:</strong> @Model.Price.ToString("C")</p>
+            <p><strong>Mô tả:</strong> @Model.Detail</p>
+
+            @if (Model.IsTrendingProduct)
+            {
+                <span class="badge bg-warning text-dark">Sản phẩm nổi bật</span>
+            }
+
+            <br /><br />
+            <a href="/Product" class="btn btn-secondary">Quay lại danh sách</a>
+        </div>
+    </div>
+</div>
