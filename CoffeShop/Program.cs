@@ -16,7 +16,7 @@ namespace CoffeShop
 
             var app = builder.Build();
 
-            builder.Services.AddDbContext<CoffeshopDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("CoffeeShopDbContextConnection")));
+            //builder.Services.AddDbContext<CoffeshopDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("CoffeeShopDbContextConnection")));
             // Đăng ký Interface và Repository
 
             // Configure the HTTP request pipeline.
