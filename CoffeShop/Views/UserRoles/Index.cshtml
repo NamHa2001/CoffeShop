@@ -1,0 +1,35 @@
+@model List<CoffeShop.Models.User.UserRolesVM>
+@{
+    ViewData["Title"] = "Phân quyền người dùng";
+}
+
+<h1>Danh sách người dùng & Quyền</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Họ</th>
+            <th>Tên</th>
+            <th>Email</th>
+            <th>Quyền</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.Email</td>
+                <td>@string.Join(", ", user.Roles ?? Enumerable.Empty<string>())</td>
+                <td>
+                    <a class="btn btn-primary btn-sm"
+                       asp-controller="UserRoles"
+                       asp-action="Manage"
+                       asp-route-userId="@user.UserId">Phân quyền</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

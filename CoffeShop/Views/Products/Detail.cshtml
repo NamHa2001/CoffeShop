@@ -1,28 +1,43 @@
-﻿@model CoffeShop.Models.Product
-
+@model CoffeShop.Models.Product
 @{
     ViewData["Title"] = "Chi tiết sản phẩm";
 }
 
+<a class="btn btn-secondary mb-3" asp-controller="Products" asp-action="GetAll">
+    ← Trở về danh sách
+</a>
+<h1>Thông tin chi tiết sản phẩm</h1>
+<hr />
+
 <div class="container">
-    <h1>@Model.Name</h1>
-    <hr />
     <div class="row">
-        <div class="col-md-6">
-            <img src="@Model.ImageUrl" alt="@Model.Name" style="width:100%; max-width:400px; border-radius: 8px;" />
+        <div class="col-sm-3">
+            <img src="@Model.ImageUrl" class="img-thumbnail float-left" />
         </div>
-        <div class="col-md-6">
-            <h3>Thông tin chi tiết</h3>
-            <p><strong>Giá:</strong> @Model.Price.ToString("C")</p>
-            <p><strong>Mô tả:</strong> @Model.Detail</p>
+        <div class="col-sm-9">
+            <p><span class="fw-bold">Tên sản phẩm:</span> @Model.Name</p>
+            <p><span class="fw-bold">Giá:</span> @Model.Price.ToString("C")</p>
+            <p><span class="fw-bold">Mô tả:</span> @Model.Detail</p>
+            <p>
+                <span class="fw-bold">Nổi bật:</span>
+                @if (Model.IsTrendingProduct)
+                {
+                    <span class="badge bg-warning text-dark">Sản phẩm nổi bật</span>
+                }
+                else
+                {
+                    <span>Không</span>
+                }
+            </p>
 
-            @if (Model.IsTrendingProduct)
+            @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
             {
-                <span class="badge bg-warning text-dark">Sản phẩm nổi bật</span>
+                <a class="btn btn-warning" href="/Products/Edit/@Model.Id">Chỉnh sửa</a>
             }
-
-            <br /><br />
-            <a href="/Product" class="btn btn-secondary">Quay lại danh sách</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a class="btn btn-danger ms-2" href="/Products/Delete/@Model.Id">Xóa</a>
+            }
         </div>
     </div>
 </div>

@@ -1,15 +1,26 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <title>Coffee Shop</title>
-</head>
-<body>
-    <h1>Shop Coffee</h1>
+@model IEnumerable<CoffeShop.Models.Product>
+@{
+    ViewData["Title"] = "Shop Coffee";
+}
+
+<h1 class="mb-4">Shop Coffee</h1>
+<div class="row">
     @foreach (var item in Model)
     {
-        <img width="100" src="@item.ImageUrl" />
-        <h3>@item.Name</h3>
-        <p>@item.Price.ToString("C")</p>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="@item.ImageUrl" class="card-img-top" style="height:200px; object-fit:cover;" />
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text text-muted">@item.Detail</p>
+                    @if (item.IsTrendingProduct)
+                    {
+                        <span class="badge bg-warning text-dark mb-2">Nổi bật</span>
+                    }
+                    <p class="fw-bold">@item.Price.ToString("C")</p>
+                    <a class="btn btn-primary btn-sm" href="/Products/Detail/@item.Id">Xem chi tiết</a>
+                </div>
+            </div>
+        </div>
     }
-</body>
-</html>
+</div>

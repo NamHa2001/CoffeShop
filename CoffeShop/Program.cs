@@ -1,7 +1,10 @@
-﻿using CoffeShop.Models.Services;
-using CoffeShop.Models.Interfaces;
 using CoffeShop.Data;
+using CoffeShop.Models.Services;
+using CoffeShop.Models.Interfaces;
+using CoffeShop.Models.User;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 namespace CoffeShop
 {
     public class Program
@@ -9,29 +12,43 @@ namespace CoffeShop
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // EF Core – DB sản phẩm
+            builder.Services.AddDbContext<CoffeshopDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("CoffeeShopDbContextConnection")));
+
+            // EF Core – DB Identity (xác thực & phân quyền)
+            builder.Services.AddDbContext<AuthenDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("AuthenDbContextConnection")));
+
+            // Identity
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<AuthenDbContext>()
+                .AddDefaultTokenProviders();
+
+            // AutoMapper
+            builder.Services.AddAutoMapper(typeof(Program));
+
+            // Repository
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
-            // Add services to the container.
+            // MVC
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
-            //builder.Services.AddDbContext<CoffeshopDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("CoffeeShopDbContextConnection")));
-            // Đăng ký Interface và Repository
-
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
+            // Phải có UseAuthentication TRƯỚC UseAuthorization
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
