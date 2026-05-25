@@ -17,6 +17,9 @@ namespace CoffeShop
 
             // Section 1: Registering Services in IOC Container
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSession();
+            builder.Services.AddScoped<IShoppingCartRepository>(sc => ShoppingCartRepository.GetCart(sc));
 
             // MVC
             builder.Services.AddControllersWithViews();
@@ -26,6 +29,7 @@ namespace CoffeShop
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseSession();
             app.UseAuthorization();
 
             app.MapControllerRoute(
