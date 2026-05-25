@@ -1,8 +1,6 @@
 using CoffeShop.Data;
-using CoffeShop.Models.Services;
 using CoffeShop.Models.Interfaces;
-using CoffeShop.Models.User;
-using Microsoft.AspNetCore.Identity;
+using CoffeShop.Models.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoffeShop
@@ -13,23 +11,11 @@ namespace CoffeShop
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // EF Core – DB sản phẩm
-            builder.Services.AddDbContext<CoffeshopDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("CoffeeShopDbContextConnection")));
+            // Section 2: Connect Entity Framework Core and MSSQL
+            builder.Services.AddDbContext<CoffeeshopDbContext>(option =>
+                option.UseSqlServer(builder.Configuration.GetConnectionString("CoffeeShopDbContextConnection")));
 
-            // EF Core – DB Identity (xác thực & phân quyền)
-            builder.Services.AddDbContext<AuthenDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("AuthenDbContextConnection")));
-
-            // Identity
-            builder.Services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<AuthenDbContext>()
-                .AddDefaultTokenProviders();
-
-            // AutoMapper
-            builder.Services.AddAutoMapper(typeof(Program));
-
-            // Repository
+            // Section 1: Registering Services in IOC Container
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
             // MVC
@@ -37,18 +23,9 @@ namespace CoffeShop
 
             var app = builder.Build();
 
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-
-            // Phải có UseAuthentication TRƯỚC UseAuthorization
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

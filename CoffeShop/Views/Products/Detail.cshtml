@@ -1,43 +1,35 @@
-@model CoffeShop.Models.Product
-@{
-    ViewData["Title"] = "Chi tiết sản phẩm";
-}
+@model Product
 
-<a class="btn btn-secondary mb-3" asp-controller="Products" asp-action="GetAll">
-    ← Trở về danh sách
-</a>
-<h1>Thông tin chi tiết sản phẩm</h1>
-<hr />
+<br><br><br>
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm-3">
-            <img src="@Model.ImageUrl" class="img-thumbnail float-left" />
-        </div>
-        <div class="col-sm-9">
-            <p><span class="fw-bold">Tên sản phẩm:</span> @Model.Name</p>
-            <p><span class="fw-bold">Giá:</span> @Model.Price.ToString("C")</p>
-            <p><span class="fw-bold">Mô tả:</span> @Model.Detail</p>
-            <p>
-                <span class="fw-bold">Nổi bật:</span>
-                @if (Model.IsTrendingProduct)
-                {
-                    <span class="badge bg-warning text-dark">Sản phẩm nổi bật</span>
-                }
-                else
-                {
-                    <span>Không</span>
-                }
-            </p>
-
-            @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
-            {
-                <a class="btn btn-warning" href="/Products/Edit/@Model.Id">Chỉnh sửa</a>
-            }
-            @if (User.IsInRole("Admin"))
-            {
-                <a class="btn btn-danger ms-2" href="/Products/Delete/@Model.Id">Xóa</a>
-            }
+    <div class="card-wrapper">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="image-wrapper">
+                    <img src="@Model.ImageUrl" alt="Website Builder">
+                </div>
+            </div>
+            <div class="col-12 col-lg">
+                <div class="text-box">
+                    <h5 class="mbr-title mbr-fonts-style display-2">
+                        <strong>@Model.Name</strong>
+                    </h5>
+                    <p class="mbr-text mbr-fonts-style display-7">
+                        @Model.Detail
+                    </p>
+                    <div class="cost">
+                        <span class="currentcost mbr-fonts-style pr-2 display-2">@Model.Price.ToString("c")</span>
+                    </div>
+                    <div class="mbr-section-btn pt-3">
+                        <a href="" class="btn btn-primary display-4">
+                            <span class="mbrib-cart-add mbr-iconfont mbr-iconfont-btn"></span>Add to cart&nbsp;
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<br><br><br><br><br>
