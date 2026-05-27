@@ -1,4 +1,4 @@
-using CoffeShop.Data;
+﻿using CoffeShop.Data;
 using CoffeShop.Models.Interfaces;
 using CoffeShop.Models.Services;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +20,8 @@ namespace CoffeShop
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddSession();
             builder.Services.AddScoped<IShoppingCartRepository>(sc => ShoppingCartRepository.GetCart(sc));
+            // Đăng ký dịch vụ cho tầng Repository xử lý đơn hàng
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
             // MVC
             builder.Services.AddControllersWithViews();
