@@ -1,7 +1,7 @@
 ﻿using CoffeShop.Data;
 using CoffeShop.Models.Interfaces;
 
-
+using Microsoft.EntityFrameworkCore;
 namespace CoffeShop.Models.Services
 {
     public class OrderRepository : IOrderRepository
@@ -15,6 +15,15 @@ namespace CoffeShop.Models.Services
             this.shoppingCartRepository = shoppingCartRepository;
         }
 
+        public IEnumerable<Order> GetUserOrders(string email)
+        {
+            return dbContext.Order
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product) // Nối bảng để lấy được tên và ảnh sản phẩm
+                .Where(o => o.Email == email)
+                .OrderByDescending(o => o.OrderPlaced) // Xếp đơn hàng mới nhất lên đầu
+                .ToList();
+        }
         public void PlaceOrder(Order order)
         {
             var shoppingCartItems = shoppingCartRepository.GetAllShoppingCartItems();

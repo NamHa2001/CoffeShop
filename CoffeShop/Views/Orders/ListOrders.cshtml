@@ -1,0 +1,63 @@
+﻿@model IEnumerable<CoffeShop.Models.Order>
+@{
+    ViewData["Title"] = "List your orders";
+    int stt = 1; // Biến đếm số thứ tự
+}
+
+<section class="features3 cid-tsJ8wGtENs" id="features3-q" style="padding-top: 100px;">
+    <div class="container">
+        <div class="mbr-section-head mb-5">
+            <h3 class="mbr-section-title mbr-fonts-style align-left mb-0 display-2">
+                <strong>List your orders</strong>
+            </h3>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead style="border-bottom: 2px solid #ccc;">
+                    <tr>
+                        <th class="mbr-fonts-style display-7"><strong>Stt</strong></th>
+                        <th class="mbr-fonts-style display-7"><strong>Time order</strong></th>
+                        <th class="mbr-fonts-style display-7"><strong>Detail</strong></th>
+                        <th class="mbr-fonts-style display-7"><strong>Shipping Address</strong></th>
+                        <th class="mbr-fonts-style display-7"><strong>Total</strong></th>
+                        <th class="mbr-fonts-style display-7"><strong>Status</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var order in Model)
+                        {
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td class="mbr-fonts-style display-7">@(stt++)</td>
+                                <td class="mbr-fonts-style display-7">@order.OrderPlaced.ToString("dd/MM/yyyy h:mm:ss tt")</td>
+                                <td>
+                                    @if (order.OrderDetails != null)
+                                    {
+                                        foreach (var detail in order.OrderDetails)
+                                        {
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="@detail.Product?.ImageUrl" alt="Product Image" style="width: 60px; height: 40px; object-fit: cover; margin-right: 10px; border-radius: 4px;" />
+                                                <span class="mbr-fonts-style display-7">@detail.Quantity x @detail.Product?.Name x @detail.Price.ToString("0.00")</span>
+                                            </div>
+                                        }
+                                    }
+                                </td>
+                                <td class="mbr-fonts-style display-7">@order.Address</td>
+                                <td class="mbr-fonts-style display-7">@order.OrderTotal.ToString("0.00")</td>
+                                <td class="mbr-fonts-style display-7">Success</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center mbr-fonts-style display-7 py-4">Bạn chưa có đơn hàng nào.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

@@ -1,7 +1,8 @@
-﻿using CoffeShop.Data;
+using CoffeShop.Data;
 using CoffeShop.Models.Interfaces;
 using CoffeShop.Models.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace CoffeShop
 {
@@ -26,18 +27,28 @@ namespace CoffeShop
             // MVC
             builder.Services.AddControllersWithViews();
 
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+    options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<CoffeeshopDbContext>();
+
+            builder.Services.AddRazorPages();
             var app = builder.Build();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseSession();
+
+            app.UseAuthentication(); //code
+
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            app.MapRazorPages();
             app.Run();
         }
     }

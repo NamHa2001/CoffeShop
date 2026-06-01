@@ -1,15 +1,15 @@
 using CoffeShop.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CoffeShop.Data
 {
-    public class CoffeeshopDbContext : DbContext
+    public class CoffeeshopDbContext : IdentityDbContext
     {
-        public CoffeeshopDbContext(DbContextOptions<CoffeeshopDbContext> options)
-            : base(options)
+        public CoffeeshopDbContext(DbContextOptions<CoffeeshopDbContext> options) : base(options)
         {
         }
-
+        public DbSet<Contact> Contacts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
         public DbSet<Order> Order { get; set; }
